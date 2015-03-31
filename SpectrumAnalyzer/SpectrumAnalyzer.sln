@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpectrumAnalyzer", "Spectru
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MMAudioPlayer", "MMAudioPlayer\MMAudioPlayer.vcxproj", "{34B5E7C2-D563-4375-A9A6-900069717F74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasapiCaptureRT", "WasapiCaptureRT\WasapiCaptureRT.csproj", "{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,30 @@ Global
 		{34B5E7C2-D563-4375-A9A6-900069717F74}.Release|x64.Build.0 = Release|x64
 		{34B5E7C2-D563-4375-A9A6-900069717F74}.Release|x86.ActiveCfg = Release|Win32
 		{34B5E7C2-D563-4375-A9A6-900069717F74}.Release|x86.Build.0 = Release|Win32
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|ARM.Build.0 = Debug|ARM
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|Win32.ActiveCfg = Debug|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|Win32.Build.0 = Debug|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|x64.ActiveCfg = Debug|x64
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|x64.Build.0 = Debug|x64
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|x86.ActiveCfg = Debug|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Debug|x86.Build.0 = Debug|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|ARM.ActiveCfg = Release|ARM
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|ARM.Build.0 = Release|ARM
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|Win32.ActiveCfg = Release|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|Win32.Build.0 = Release|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|x64.ActiveCfg = Release|x64
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|x64.Build.0 = Release|x64
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|x86.ActiveCfg = Release|x86
+		{D780FCD9-6BC2-475C-A297-DEB175A5B5E6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
