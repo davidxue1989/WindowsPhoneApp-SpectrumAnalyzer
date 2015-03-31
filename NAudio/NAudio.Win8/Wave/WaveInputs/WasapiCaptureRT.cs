@@ -116,7 +116,7 @@ namespace NAudio.Wave
             var audioClient = new AudioClient((IAudioClient)audioClientInterface);
             if (waveFormat == null)
             {                
-                this.waveFormat = audioClient.MixFormat;
+                this.waveFormat = audioClient.MixFormat; //dx: why does this line set waveFormat's encoding to "extensible" instead of pcm?
             }         
 
             long requestedDuration = REFTIMES_PER_MILLISEC * 100;

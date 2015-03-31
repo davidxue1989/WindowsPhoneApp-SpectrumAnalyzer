@@ -18,7 +18,7 @@ namespace NAudio.Wave.SampleProviders
         public static ISampleProvider ConvertWaveProviderIntoSampleProvider(IWaveProvider waveProvider)
         {
             ISampleProvider sampleProvider;
-            if (waveProvider.WaveFormat.Encoding == WaveFormatEncoding.Pcm)
+            if (waveProvider.WaveFormat.Encoding == WaveFormatEncoding.Pcm || waveProvider.WaveFormat.Encoding == WaveFormatEncoding.Extensible)
             {
                 // go to float
                 if (waveProvider.WaveFormat.BitsPerSample == 8)

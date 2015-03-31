@@ -32,8 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{FA54AC
 		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpectrumAnalyzerApp", "SpectrumAnalyzerApp\SpectrumAnalyzerApp.csproj", "{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -166,30 +164,6 @@ Global
 		{03A0E22E-5B00-4B87-9CDF-20CC121DCF03}.Release|x86.ActiveCfg = Release|x86
 		{03A0E22E-5B00-4B87-9CDF-20CC121DCF03}.Release|x86.Build.0 = Release|x86
 		{03A0E22E-5B00-4B87-9CDF-20CC121DCF03}.Release|x86.Deploy.0 = Release|x86
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|ARM.ActiveCfg = Debug|ARM
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|ARM.Build.0 = Debug|ARM
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|ARM.Deploy.0 = Debug|ARM
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|x64.ActiveCfg = Debug|x64
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|x64.Build.0 = Debug|x64
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|x64.Deploy.0 = Debug|x64
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|x86.ActiveCfg = Debug|x86
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|x86.Build.0 = Debug|x86
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Debug|x86.Deploy.0 = Debug|x86
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|ARM.ActiveCfg = Release|ARM
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|ARM.Build.0 = Release|ARM
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|ARM.Deploy.0 = Release|ARM
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|x64.ActiveCfg = Release|x64
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|x64.Build.0 = Release|x64
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|x64.Deploy.0 = Release|x64
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|x86.ActiveCfg = Release|x86
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|x86.Build.0 = Release|x86
-		{6236BC51-BEC2-4FF5-9AA9-3F0A50551959}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

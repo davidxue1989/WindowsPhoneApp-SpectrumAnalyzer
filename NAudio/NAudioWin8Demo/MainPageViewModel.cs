@@ -85,6 +85,14 @@ namespace NAudioWin8Demo
             if (recorder == null)
             {
                 recorder = new WasapiCaptureRT();
+
+                //dx: added a specification for recorder's WaveFormat so it can be played back in real time
+                //int sampleRate = 44100;
+                //int bitDepth = 16;
+                //int channelCount = 2;
+                //recorder.WaveFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+                //dx: actually, as long as your playback device's sample rate, channels, and bitdepth matche those of the recording device, the real time play back work without the above codes
+                
                 recorder.RecordingStopped += RecorderOnRecordingStopped;
                 recorder.DataAvailable += RecorderOnDataAvailable;               
             }

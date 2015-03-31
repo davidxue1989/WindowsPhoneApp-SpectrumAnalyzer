@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
 
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace SpectrumAnalyzer
@@ -35,7 +36,6 @@ namespace SpectrumAnalyzer
         public MainPage()
         {
             this.InitializeComponent();
-
 
             double inc = 0;
             for (int i = 0; i < num_of_fft_bands; i++)
