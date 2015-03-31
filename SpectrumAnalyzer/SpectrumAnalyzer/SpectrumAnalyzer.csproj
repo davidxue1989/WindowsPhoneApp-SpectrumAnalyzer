@@ -89,6 +89,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -102,9 +103,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -117,23 +115,13 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="SpectrumAnalyzer_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="MMAudioPlayer\FFTSampleAggregator.cpp" />
-    <Content Include="MMAudioPlayer\FFTSampleAggregator.h" />
-    <Content Include="MMAudioPlayer\pch.cpp" />
-    <Content Include="MMAudioPlayer\pch.h" />
-    <Content Include="MMAudioPlayer\player.cpp" />
-    <Content Include="MMAudioPlayer\player.h" />
-    <Content Include="MMAudioPlayer\SpectrumAnalyzerXAPO.cpp" />
-    <Content Include="MMAudioPlayer\SpectrumAnalyzerXAPO.h" />
-    <Content Include="MMAudioPlayer\utils.h" />
-    <Content Include="MMAudioPlayer\XDSP.h" />
+    <Content Include="Assets\Surface-Movement.mp3" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -144,6 +132,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MMAudioPlayer\MMAudioPlayer.vcxproj">
+      <Project>{34b5e7c2-d563-4375-a9a6-900069717f74}</Project>
+      <Name>MMAudioPlayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
