@@ -86,8 +86,8 @@ namespace SpectrumAnalyzer
         {
             //var file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync("Assets\\440Hz-5sec.mp3");
             //var file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync("Assets\\sweep20-20klog.mp3");
-            var dir = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
             var file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync("Assets\\Surface-Movement.mp3");
+            //var file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync("Assets\\1000hz.mp3");
             //var file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync("Assets\\Surface-Movement_wav.wav");
             var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
 
