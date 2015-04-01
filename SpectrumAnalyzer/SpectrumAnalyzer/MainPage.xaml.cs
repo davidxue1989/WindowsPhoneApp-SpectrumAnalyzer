@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
-
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -36,6 +36,14 @@ namespace SpectrumAnalyzer
         public MainPage()
         {
             this.InitializeComponent();
+
+
+            //NAudioWrapper audioWrapper = new NAudioWrapper();
+            //Task.Factory.StartNew(() => { audioWrapper.Record(); });
+            //return;
+
+
+
 
             double inc = 0;
             for (int i = 0; i < num_of_fft_bands; i++)
