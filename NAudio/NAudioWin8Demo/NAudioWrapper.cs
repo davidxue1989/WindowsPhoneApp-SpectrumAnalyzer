@@ -26,7 +26,7 @@ namespace SpectrumAnalyzer
     class NAudioWrapper
     {
         private WaveStream reader;
-        int counter;
+        int counter; 
         private IWaveIn recorder;
         private MemoryStream recordStream;
 
@@ -102,8 +102,7 @@ namespace SpectrumAnalyzer
 
                 PlayFFT();
 
-                await OnUiThread(async () =>
-                {
+                await OnUiThread(async () => {
                     await Save("test");
                 });
                 counter = 0;
@@ -235,7 +234,7 @@ namespace SpectrumAnalyzer
             writer = new WaveFileWriter();
             await writer.CreateWaveFile(filename, CreateReader());
             writer.Dispose();
-            writer = null;
+            writer = null; 
         }
 
 

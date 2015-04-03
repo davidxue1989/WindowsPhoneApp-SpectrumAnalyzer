@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="MainPageViewModel.cs" />
     <Compile Include="MediaFoundationReaderRT.cs" />
+    <Compile Include="NAudioWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>

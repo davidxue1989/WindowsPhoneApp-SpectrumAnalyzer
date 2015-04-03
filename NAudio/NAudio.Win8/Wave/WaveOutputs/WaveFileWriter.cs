@@ -2,6 +2,11 @@ using System;
 using System.IO;
 using NAudio.Wave.SampleProviders;
 
+using Windows.Storage.Streams;
+using Windows.Storage.Pickers;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace NAudio.Wave
 {
     /// <summary>
@@ -9,24 +14,13 @@ namespace NAudio.Wave
     /// </summary>
     public class WaveFileWriter : Stream
     {
+        private string filename;
+        private WaveFormat format;
         private Stream outStream;
-        private readonly BinaryWriter writer;
+        private BinaryWriter writer;
         private long dataSizePos;
         private long factSampleCountPos;
         private long dataChunkSize;
-        private readonly WaveFormat format;
-        private readonly string filename;
-
-        /// <summary>
-        /// Creates a 16 bit Wave File from an ISampleProvider
-        /// BEWARE: the source provider must not return data indefinitely
-        /// </summary>
-        /// <param name="filename">The filename to write to</param>
-        /// <param name="sourceProvider">The source sample provider</param>
-        public static void CreateWaveFile16(string filename, ISampleProvider sourceProvider)
-        {
-            CreateWaveFile(filename, new SampleToWaveProvider16(sourceProvider));
-        }
 
         /// <summary>
         /// Creates a Wave file by reading all the data from a WaveProvider
@@ -35,38 +29,53 @@ namespace NAudio.Wave
         /// </summary>
         /// <param name="filename">The filename to use</param>
         /// <param name="sourceProvider">The source WaveProvider</param>
-        public static void CreateWaveFile(string filename, IWaveProvider sourceProvider)
+        //public async void CreateWaveFile(string filename, IWaveProvider sourceProvider)
+        public async Task CreateWaveFile(string filename, IWaveProvider sourceProvider)
         {
-            using (var writer = new WaveFileWriter(filename, sourceProvider.WaveFormat))
+            this.filename = filename;
+            this.format = sourceProvider.WaveFormat;
+
+            await createFile();
+
+            long outputLength = 0;
+            var buffer = new byte[format.AverageBytesPerSecond * 4];
+            while (true)
             {
-                long outputLength = 0;
-                var buffer = new byte[sourceProvider.WaveFormat.AverageBytesPerSecond * 4];
-                while (true)
+                int bytesRead = sourceProvider.Read(buffer, 0, buffer.Length);
+                if (bytesRead == 0)
                 {
-                    int bytesRead = sourceProvider.Read(buffer, 0, buffer.Length);
-                    if (bytesRead == 0)
-                    {
-                        // end of source provider
-                        break;
-                    }
-                    outputLength += bytesRead;
-                    // Write will throw exception if WAV file becomes too large
-                    writer.Write(buffer, 0, bytesRead);
+                    // end of source provider
+                    break;
                 }
-                int debug_done = 1;
+                outputLength += bytesRead;
+                // Write will throw exception if WAV file becomes too large
+                Write(buffer, 0, bytesRead);
             }
+            int debug_done = 1;
         }
 
-        /// <summary>
-        /// WaveFileWriter that actually writes to a stream
-        /// </summary>
-        /// <param name="outStream">Stream to be written to</param>
-        /// <param name="format">Wave format to use</param>
-        public WaveFileWriter(Stream outStream, WaveFormat format)
+        public WaveFileWriter()
         {
-            this.outStream = outStream;
-            this.format = format;
-            this.writer = new BinaryWriter(outStream, System.Text.Encoding.UTF8);
+        }
+
+        public async Task createFile()
+        {
+            FileSavePicker savePicker = new FileSavePicker();
+            savePicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+            savePicker.SuggestedFileName = filename;
+            savePicker.FileTypeChoices.Clear();
+            savePicker.FileTypeChoices.Add("WAV", new List<string>() { ".wav" });
+
+            // Open the file save picker.
+            var file = await savePicker.PickSaveFileAsync();
+            if (file == null) return;
+            IRandomAccessStream stream;
+            stream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+            if (stream == null) return;
+
+            this.outStream = stream.AsStreamForWrite();
+            this.writer = new BinaryWriter(this.outStream, System.Text.Encoding.UTF8);
+
             this.writer.Write(System.Text.Encoding.UTF8.GetBytes("RIFF"));
             this.writer.Write((int)0); // placeholder
             this.writer.Write(System.Text.Encoding.UTF8.GetBytes("WAVE"));
@@ -76,17 +85,6 @@ namespace NAudio.Wave
 
             CreateFactChunk();
             WriteDataChunkHeader();
-        }
-
-        /// <summary>
-        /// Creates a new WaveFileWriter
-        /// </summary>
-        /// <param name="filename">The filename to write to</param>
-        /// <param name="format">The Wave Format of the output data</param>
-        public WaveFileWriter(string filename, WaveFormat format)
-            : this(new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.Read), format)
-        {
-            this.filename = filename;
         }
 
         private void WriteDataChunkHeader()
@@ -372,7 +370,11 @@ namespace NAudio.Wave
                     {
                         // in a finally block as we don't want the FileStream to run its disposer in
                         // the GC thread if the code above caused an IOException (e.g. due to disk full)
-                        outStream.Close(); // will close the underlying base stream
+                        //outStream.Close(); // will close the underlying base stream
+
+                        writer.Dispose();
+                        writer = null;
+                        outStream.Dispose();
                         outStream = null;
                     }
                 }
@@ -385,9 +387,10 @@ namespace NAudio.Wave
         protected virtual void UpdateHeader(BinaryWriter writer)
         {
             writer.Flush();
+            UpdateDataChunk(writer);
             UpdateRiffChunk(writer);
             UpdateFactChunk(writer);
-            UpdateDataChunk(writer);
+            writer.Flush(); //dx: flush in the end is needed or else not all the updated chunks are written
         }
 
         private void UpdateDataChunk(BinaryWriter writer)
@@ -410,7 +413,6 @@ namespace NAudio.Wave
                 if (bitsPerSample != 0)
                 {
                     writer.Seek((int)factSampleCountPos, SeekOrigin.Begin);
-                    
                     writer.Write((int)((dataChunkSize * 8) / bitsPerSample));
                 }
             }

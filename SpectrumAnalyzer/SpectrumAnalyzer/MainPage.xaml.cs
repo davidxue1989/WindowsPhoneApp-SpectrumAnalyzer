@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
+using Windows.UI.Core;
+
 using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -33,15 +35,22 @@ namespace SpectrumAnalyzer
 
         MMAudioPlayer.Player player = new MMAudioPlayer.Player();
 
+        NAudioWrapper audioWrapper;
+
         public MainPage()
         {
             this.InitializeComponent();
 
 
-            //NAudioWrapper audioWrapper = new NAudioWrapper();
-            //Task.Factory.StartNew(() => { audioWrapper.Record(); });
-            //return;
+            if (audioWrapper == null)
+            {
+                audioWrapper = new NAudioWrapper(CoreWindow.GetForCurrentThread().Dispatcher);
+            }
+            audioWrapper.StartAsync();
 
+            timer.Interval = TimeSpan.FromSeconds(1 / 60);
+            timer.Tick += timer_Tick;
+            timer.Start();
 
 
 
@@ -85,8 +94,23 @@ namespace SpectrumAnalyzer
             }
 
 
-            StartAudio();
+            //StartAudio();
         }
+
+        //void audioWrapper_FftCalculated(object sender, FftEventArgs e) {
+        //    NAudio.Dsp.Complex[] fftResult = e.Result;
+        //    for (int fftIdx = 0; fftIdx < Math.Min(num_of_fft_bands, fftResult.Length / 2); fftIdx++) {
+        //        //calculate the power intensity = sqrt(real^2 + imag^2)*2
+        //        double h = Math.Sqrt(fftResult[fftIdx].X*fftResult[fftIdx].X + fftResult[fftIdx].Y*fftResult[fftIdx].Y)*1000;
+        //        if (h < 0)
+        //            h = 0;
+        //        rectangles[fftIdx].Height = h;
+        //    }
+        //}
+        
+        //void audioWrapper_MaximumCalculated(object sender, MaxSampleEventArgs e) {
+
+        //}
 
 
 
@@ -146,43 +170,56 @@ namespace SpectrumAnalyzer
             {
                 float vol = player.Vol;
 
-                if (player != null)
+                //if (player != null)
+                if (audioWrapper != null && audioWrapper.fftResult != null)
                 {
 
-                    slider.Value = player.CurrentPosition;
+                    //slider.Value = player.CurrentPosition;
 
 
-                    int cnt = 0;
-
-                    // frequency index for current FFT values returned by GetFFT is approx
-                    // [0] 60 Hz
-                    // [1] 110 Hz
-                    // [2] 150 Hz
-                    // [3] 220 Hz
-                    // [4] 360 Hz
-                    // [5] 440 Hz
-                    // [10] 880 Hz
-                    // [20] 1760 Hz
-                    // [41] 3520 Hz
-                    // try uncomment sine generator at SpectrumAnalyzerXAPO::Process
-                    // and run with some variants to see freq peaks
-                    var arr = player.GetFFT();
-
-
-                    DetectBeats(arr);
-
-
-                    //display FFT 
-                    foreach (var a in arr)
+                    NAudio.Dsp.Complex[] fftResult = audioWrapper.fftResult;
+                    for (int fftIdx = 0; fftIdx < Math.Min(num_of_fft_bands, fftResult.Length / 2); fftIdx++)
                     {
-                        double h = arr[cnt] * 1000;
+                        //calculate the power intensity = sqrt(real^2 + imag^2)*2
+                        double h = Math.Sqrt(fftResult[fftIdx].X * fftResult[fftIdx].X + fftResult[fftIdx].Y * fftResult[fftIdx].Y) * 1000;
                         if (h < 0)
                             h = 0;
-                        rectangles[cnt].Height = h;
-
-                        if (cnt < num_of_fft_bands)
-                            cnt++;
+                        rectangles[fftIdx].Height = h;
                     }
+
+
+
+                    //int cnt = 0;
+
+                    //// frequency index for current FFT values returned by GetFFT is approx
+                    //// [0] 60 Hz
+                    //// [1] 110 Hz
+                    //// [2] 150 Hz
+                    //// [3] 220 Hz
+                    //// [4] 360 Hz
+                    //// [5] 440 Hz
+                    //// [10] 880 Hz
+                    //// [20] 1760 Hz
+                    //// [41] 3520 Hz
+                    //// try uncomment sine generator at SpectrumAnalyzerXAPO::Process
+                    //// and run with some variants to see freq peaks
+                    //var arr = player.GetFFT();
+
+
+                    //DetectBeats(arr);
+
+
+                    ////display FFT 
+                    //foreach (var a in arr)
+                    //{
+                    //    double h = arr[cnt] * 1000;
+                    //    if (h < 0)
+                    //        h = 0;
+                    //    rectangles[cnt].Height = h;
+
+                    //    if (cnt < num_of_fft_bands)
+                    //        cnt++;
+                    //}
                 }
             });
 

@@ -23,6 +23,8 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="musicLibrary" />
+    <Capability Name="removableStorage" />
     <DeviceCapability Name="microphone" />
   </Capabilities>
 </Package>

@@ -109,6 +109,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MediaFoundationReaderRT.cs" />
     <Compile Include="NAudioWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -142,8 +143,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="NAudio.Win8">
-      <HintPath>..\..\NAudio\NAudio.Win8\bin\Release\NAudio.Win8.dll</HintPath>
+    <Reference Include="NAudio.Win8, Version=1.7.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NAudio\NAudio.Win8\bin\Debug\NAudio.Win8.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

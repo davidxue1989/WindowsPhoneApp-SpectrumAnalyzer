@@ -11,6 +11,9 @@ using Windows.UI.Xaml.Controls;
 using System.IO;
 using NAudio.MediaFoundation;
 
+using NAudio.Win8;
+using SpectrumAnalyzer;
+
 namespace NAudioWin8Demo
 {
     class MainPageViewModel : ViewModelBase
@@ -168,6 +171,8 @@ namespace NAudioWin8Demo
             this.selectedStream = stream; 
             PlayCommand.IsEnabled = true;
         }
+
+
 
         public DelegateCommand LoadCommand { get; private set; }
         public DelegateCommand PlayCommand { get; private set; }

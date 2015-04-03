@@ -12,6 +12,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Windows.UI.Core;
+
+using SpectrumAnalyzer;
+using System.Threading.Tasks;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace NAudioWin8Demo
@@ -21,9 +26,18 @@ namespace NAudioWin8Demo
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        NAudioWrapper audioWrapper;
+
+
         public MainPage()
         {
             this.InitializeComponent();
+
+
+            audioWrapper = new NAudioWrapper(CoreWindow.GetForCurrentThread().Dispatcher);
+            audioWrapper.StartAsync();
+
             this.DataContext = new MainPageViewModel() {MediaElement = me};
         }
 
@@ -34,6 +48,18 @@ namespace NAudioWin8Demo
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+        }
+
+
+        void audioWrapper_FftCalculated(object sender, FftEventArgs e)
+        {
+            NAudio.Dsp.Complex[] fftResult = e.Result;
+            int a = 0;
+        }
+
+        void audioWrapper_MaximumCalculated(object sender, MaxSampleEventArgs e)
+        {
+
         }
     }
 }
