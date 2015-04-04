@@ -137,12 +137,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MMAudioPlayer\MMAudioPlayer.vcxproj">
-      <Project>{34b5e7c2-d563-4375-a9a6-900069717f74}</Project>
-      <Name>MMAudioPlayer</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="NAudio.Win8, Version=1.7.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\NAudio\NAudio.Win8\bin\Debug\NAudio.Win8.dll</HintPath>

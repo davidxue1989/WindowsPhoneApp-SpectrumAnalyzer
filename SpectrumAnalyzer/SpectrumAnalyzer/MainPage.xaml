@@ -9,25 +9,5 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="mainGrid">
 
-        <Grid x:Name="BandVisuals" VerticalAlignment="Top"  Margin="48,10,304,0" Height="229">
-
-        </Grid>
-
-        <Slider x:Name="slider"  HorizontalAlignment="Left" Margin="48,239,0,0" VerticalAlignment="Top" Width="768"  >
-        </Slider>
-        <Slider x:Name="slider_seek"  HorizontalAlignment="Left" Margin="48,239,0,0" VerticalAlignment="Top" Width="768"  Opacity="0" ValueChanged="slider_seek_ValueChanged_1">
-        </Slider>
-
-        <Slider x:Name="sliderVolume" 
-                HorizontalAlignment="Left" VerticalAlignment="Top" Width="42" Orientation="Vertical" Height="174" Minimum="0" Maximum="1" StepFrequency="0.1" 
-                          Margin="1,27,0,0" Value="1.0"
-                ValueChanged="slider_volume_value_changed"
-                />
-        <Button Content="Spectrum test: SET VOLUME LOW!" HorizontalAlignment="Left" Margin="245,299,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <Button Content="Play" HorizontalAlignment="Left" Margin="48,299,0,0" VerticalAlignment="Top" Click="Play_Button_Click"/>
-        <Button Content="Stop" HorizontalAlignment="Left" Margin="127,299,0,0" VerticalAlignment="Top" Click="Stop_Button_Click"/>
-
-
-
     </Grid>
 </Page>
