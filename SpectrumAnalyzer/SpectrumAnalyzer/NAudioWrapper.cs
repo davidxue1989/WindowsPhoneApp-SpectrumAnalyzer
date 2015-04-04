@@ -87,28 +87,45 @@ namespace SpectrumAnalyzer
 
         private async void RecorderOnDataAvailable(object sender, WaveInEventArgs waveInEventArgs)
         {
-            if (reader == null)
+            //dx: playback fft
+            //if (reader == null)
+            //{
+            //    recordStream = new MemoryStream();
+            //    reader = new RawSourceWaveStream(recordStream, (recorder.WaveFormat as WaveFormatExtensible).ToStandardWaveFormat()); //dx: this will make the waveformat encoding "pcm or ieeefloat" instead of the annoying microsoft's "extensible" (which is just pcm / ieeefloat under the hood)
+            //    CreateReaderFFT(); //dx: so we can have a stream for FFT analysis in real-time
+            //}
+            //await recordStream.WriteAsync(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
+            //counter++;
+            //if (counter == 500)
+            //{
+            //    StopRecording();
+            //    PlayFFT();
+            //    await OnUiThread(async () =>
+            //    {
+            //        await Save("test");
+            //    });
+            //    counter = 0;
+            //}
+
+            //dx: real-time fft
+            if (aggregator == null)
             {
-                recordStream = new MemoryStream();
-                reader = new RawSourceWaveStream(recordStream, (recorder.WaveFormat as WaveFormatExtensible).ToStandardWaveFormat()); //dx: this will make the waveformat encoding "pcm or ieeefloat" instead of the annoying microsoft's "extensible"
+                aggregator = new SampleAggregator();
+                aggregator.PerformFFT = true;
+                aggregator.FftCalculated += (s, a) => OnFftCalculated(a);
+                aggregator.MaximumCalculated += (s, a) => OnMaximumCalculated(a);
             }
-
-            await recordStream.WriteAsync(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
-            counter++;
-            if (counter == 500)
+            float[] fftBuffer = new float[waveInEventArgs.BytesRecorded / 4];
+            int outputIndex = 0;
+            for (int n = 0; n < waveInEventArgs.BytesRecorded; n += 4)
             {
-                counter = 0;
-                StopRecording();
-
-
-                PlayFFT();
-
-                //await OnUiThread(async () =>
-                //{
-                //    await Save("test");
-                //});
-
+                fftBuffer[outputIndex++] = BitConverter.ToSingle(waveInEventArgs.Buffer, n);
             }
+            for (int n = 0; n < waveInEventArgs.BytesRecorded / 4; n += (sender as IWaveIn).WaveFormat.Channels)
+            {
+                aggregator.Add(fftBuffer[n]);
+            }
+            counter += waveInEventArgs.BytesRecorded;
         }
 
         public void StopRecording()
@@ -283,6 +300,18 @@ namespace SpectrumAnalyzer
 
         private readonly int channels;
 
+        public SampleAggregator(int fftLength = 1024) //dx: for real-time fft, we don't need a source stream, we feed the buffer ourselves
+        {
+            if (!IsPowerOfTwo(fftLength))
+            {
+                throw new ArgumentException("FFT Length must be a power of two");
+            }
+            this.m = (int)Math.Log(fftLength, 2.0);
+            this.fftLength = fftLength;
+            this.fftBuffer = new Complex[fftLength];
+            this.fftArgs = new FftEventArgs(fftBuffer);
+        }
+
         public SampleAggregator(ISampleProvider source, int fftLength = 1024)
         {
             channels = source.WaveFormat.Channels;
@@ -309,7 +338,7 @@ namespace SpectrumAnalyzer
             maxValue = minValue = 0;
         }
 
-        private void Add(float value)
+        public void Add(float value)
         {
             if (PerformFFT && FftCalculated != null)
             {
