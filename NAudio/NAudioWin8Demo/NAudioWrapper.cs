@@ -26,7 +26,7 @@ namespace SpectrumAnalyzer
     class NAudioWrapper
     {
         private WaveStream reader;
-        int counter; 
+        int counter;
         private IWaveIn recorder;
         private MemoryStream recordStream;
 
@@ -54,12 +54,12 @@ namespace SpectrumAnalyzer
 
         public async void StartAsync()
         {
-#if false
+#if true
             await LoadAsync();
 
-            Save("test");
+            //Save("test");
             //Play();
-            //PlayFFT();
+            PlayFFT();
 
 #else
             Record();
@@ -90,7 +90,7 @@ namespace SpectrumAnalyzer
             if (reader == null)
             {
                 recordStream = new MemoryStream();
-                reader = new RawSourceWaveStream(recordStream, recorder.WaveFormat);
+                reader = new RawSourceWaveStream(recordStream, (recorder.WaveFormat as WaveFormatExtensible).ToStandardWaveFormat()); //dx: this will make the waveformat encoding "pcm or ieeefloat" instead of the annoying microsoft's "extensible"
             }
 
             await recordStream.WriteAsync(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
@@ -102,7 +102,8 @@ namespace SpectrumAnalyzer
 
                 PlayFFT();
 
-                await OnUiThread(async () => {
+                await OnUiThread(async () =>
+                {
                     await Save("test");
                 });
                 counter = 0;
@@ -131,13 +132,12 @@ namespace SpectrumAnalyzer
             if (reader is RawSourceWaveStream)
             {
                 reader.Position = 0;
-                return reader;
             }
             else
             {
                 reader = new MediaFoundationReaderRT(selectedStream);
-                return reader;
             }
+            return reader;
         }
 
         private IWaveProvider CreateReaderFFT()
@@ -222,7 +222,11 @@ namespace SpectrumAnalyzer
         protected virtual void OnFftCalculated(FftEventArgs e)
         {
             //save the fft result
-            fftResult = e.Result;
+            fftResult = new Complex[e.Result.Length];
+            for (int i = 0; i < fftResult.Length; i++)
+            {
+                fftResult[i] = e.Result[i];
+            }
         }
 
         protected virtual void OnMaximumCalculated(MaxSampleEventArgs e)
@@ -234,7 +238,7 @@ namespace SpectrumAnalyzer
             writer = new WaveFileWriter();
             await writer.CreateWaveFile(filename, CreateReader());
             writer.Dispose();
-            writer = null; 
+            writer = null;
         }
 
 

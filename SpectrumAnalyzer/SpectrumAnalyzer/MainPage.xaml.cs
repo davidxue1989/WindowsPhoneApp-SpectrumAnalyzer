@@ -181,7 +181,7 @@ namespace SpectrumAnalyzer
                     for (int fftIdx = 0; fftIdx < Math.Min(num_of_fft_bands, fftResult.Length / 2); fftIdx++)
                     {
                         //calculate the power intensity = sqrt(real^2 + imag^2)*2
-                        double h = Math.Sqrt(fftResult[fftIdx].X * fftResult[fftIdx].X + fftResult[fftIdx].Y * fftResult[fftIdx].Y) * 1000;
+                        double h = Math.Sqrt(fftResult[fftIdx].X * fftResult[fftIdx].X + fftResult[fftIdx].Y * fftResult[fftIdx].Y) * 10000;
                         if (h < 0)
                             h = 0;
                         rectangles[fftIdx].Height = h;

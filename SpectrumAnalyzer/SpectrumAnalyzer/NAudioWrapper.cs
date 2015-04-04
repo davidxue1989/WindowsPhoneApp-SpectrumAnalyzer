@@ -57,9 +57,9 @@ namespace SpectrumAnalyzer
 #if false
             await LoadAsync();
 
-            Save("test");
+            //Save("test");
             //Play();
-            //PlayFFT();
+            PlayFFT();
 
 #else
             Record();
@@ -90,23 +90,24 @@ namespace SpectrumAnalyzer
             if (reader == null)
             {
                 recordStream = new MemoryStream();
-                reader = new RawSourceWaveStream(recordStream, recorder.WaveFormat);
+                reader = new RawSourceWaveStream(recordStream, (recorder.WaveFormat as WaveFormatExtensible).ToStandardWaveFormat()); //dx: this will make the waveformat encoding "pcm or ieeefloat" instead of the annoying microsoft's "extensible"
             }
 
             await recordStream.WriteAsync(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
             counter++;
             if (counter == 500)
             {
+                counter = 0;
                 StopRecording();
 
 
                 PlayFFT();
 
-                await OnUiThread(async () =>
-                {
-                    await Save("test");
-                });
-                counter = 0;
+                //await OnUiThread(async () =>
+                //{
+                //    await Save("test");
+                //});
+
             }
         }
 
@@ -132,13 +133,12 @@ namespace SpectrumAnalyzer
             if (reader is RawSourceWaveStream)
             {
                 reader.Position = 0;
-                return reader;
             }
             else
             {
                 reader = new MediaFoundationReaderRT(selectedStream);
-                return reader;
             }
+            return reader;
         }
 
         private IWaveProvider CreateReaderFFT()
@@ -223,7 +223,11 @@ namespace SpectrumAnalyzer
         protected virtual void OnFftCalculated(FftEventArgs e)
         {
             //save the fft result
-            fftResult = e.Result;
+            fftResult = new Complex[e.Result.Length];
+            for (int i = 0; i < fftResult.Length; i++)
+            {
+                fftResult[i] = e.Result[i];
+            }
         }
 
         protected virtual void OnMaximumCalculated(MaxSampleEventArgs e)
