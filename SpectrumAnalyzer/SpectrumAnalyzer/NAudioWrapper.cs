@@ -28,7 +28,7 @@ namespace SpectrumAnalyzer
         private WaveStream reader;
         int counter;
         private IWaveIn recorder;
-        private MemoryStream recordStream;
+        //private MemoryStream recordStream;
 
         private IRandomAccessStream selectedStream;
 
@@ -40,6 +40,9 @@ namespace SpectrumAnalyzer
         WaveFileWriter writer;
 
         private readonly CoreDispatcher dispatcher;
+
+        public event EventHandler<FftEventArgs> FftCalculated_UI;
+
 
         public NAudioWrapper(CoreDispatcher dispatcher)
         {
@@ -113,7 +116,6 @@ namespace SpectrumAnalyzer
                 aggregator = new SampleAggregator();
                 aggregator.PerformFFT = true;
                 aggregator.FftCalculated += (s, a) => OnFftCalculated(a);
-                aggregator.MaximumCalculated += (s, a) => OnMaximumCalculated(a);
             }
             float[] fftBuffer = new float[waveInEventArgs.BytesRecorded / 4];
             int outputIndex = 0;
@@ -163,11 +165,8 @@ namespace SpectrumAnalyzer
             if (aggregator == null)
             {
                 aggregator = new SampleAggregator(WaveExtensionMethods.ToSampleProvider(CreateReader()));
-
-                aggregator.NotificationCount = reader.WaveFormat.SampleRate / 100;
                 aggregator.PerformFFT = true;
                 aggregator.FftCalculated += (s, a) => OnFftCalculated(a);
-                aggregator.MaximumCalculated += (s, a) => OnMaximumCalculated(a);
             }
             return new SampleToWaveProvider(aggregator);
         }
@@ -245,11 +244,12 @@ namespace SpectrumAnalyzer
             {
                 fftResult[i] = e.Result[i];
             }
+
+            //update UI
+            if (FftCalculated_UI!=null)
+                FftCalculated_UI(this, e);
         }
 
-        protected virtual void OnMaximumCalculated(MaxSampleEventArgs e)
-        {
-        }
 
         public async Task Save(string filename)
         {
@@ -281,12 +281,6 @@ namespace SpectrumAnalyzer
     }
     public class SampleAggregator : ISampleProvider
     {
-        // volume
-        public event EventHandler<MaxSampleEventArgs> MaximumCalculated;
-        private float maxValue;
-        private float minValue;
-        public int NotificationCount { get; set; }
-        int count;
 
         // FFT
         public event EventHandler<FftEventArgs> FftCalculated;
@@ -331,13 +325,6 @@ namespace SpectrumAnalyzer
             return (x & (x - 1)) == 0;
         }
 
-
-        public void Reset()
-        {
-            count = 0;
-            maxValue = minValue = 0;
-        }
-
         public void Add(float value)
         {
             if (PerformFFT && FftCalculated != null)
@@ -353,18 +340,6 @@ namespace SpectrumAnalyzer
                     FftCalculated(this, fftArgs);
                 }
             }
-
-            maxValue = Math.Max(maxValue, value);
-            minValue = Math.Min(minValue, value);
-            count++;
-            if (count >= NotificationCount && NotificationCount > 0)
-            {
-                if (MaximumCalculated != null)
-                {
-                    MaximumCalculated(this, new MaxSampleEventArgs(minValue, maxValue));
-                }
-                Reset();
-            }
         }
 
         public WaveFormat WaveFormat { get { return source.WaveFormat; } }
@@ -379,17 +354,6 @@ namespace SpectrumAnalyzer
             }
             return samplesRead;
         }
-    }
-
-    public class MaxSampleEventArgs : EventArgs
-    {
-        public MaxSampleEventArgs(float minValue, float maxValue)
-        {
-            this.MaxSample = maxValue;
-            this.MinSample = minValue;
-        }
-        public float MaxSample { get; private set; }
-        public float MinSample { get; private set; }
     }
 
     public class FftEventArgs : EventArgs
